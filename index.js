@@ -41,4 +41,7 @@ mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
 			console.log('App iniciada en http://localhost:' + port);
 			console.log('Swagger docs en http://localhost:' + port + "/swagger-ui");
 		});
-	}).catch((err) => console.log(err, 'Error al conectarse a la base de datos'));
+	}).catch((err) => {
+		console.log(err, 'Error al conectarse a la base de datos');
+		process.exit(1);
+	});
