@@ -107,3 +107,45 @@ app.post('/register', async (req, res) => {
 		console.log(err);
 	}
 });
+
+/**
+ * @swagger
+ * /login:
+ *  post:
+ *    description: Login with credentials
+ *    parameters:
+ *      - in: body
+ *        name: body contents
+ *        description: User email and password
+ *        type: object
+ *        properties:
+ *          email:
+ *            type: string
+ *          password:
+ *            type: string
+ *    responses:
+ *      200:
+ *        description: success response
+ *      400:
+ *        description: Missing body parameters
+*/
+app.post('/login', async (req, res) => {
+	try {
+		const { email, password } = req.body
+		if (!(email && password)) {
+			res.status(400).send("Missing body parameters");
+		}
+		const checkUser = await Users.findOne({ email });
+		if (checkUser && (await bcrypt.compare(password, checkUser.password))) {
+			const token = jwt.sign({
+				id: checkUser._id, email
+			}, process.env.TOKEN_KEY);
+			checkUser.token = token;
+			res.status(200).json(checkUser);
+		} else {
+			res.status(400).send("Bad credentials");
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
