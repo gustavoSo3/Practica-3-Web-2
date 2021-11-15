@@ -365,3 +365,41 @@ app.post('/chanels/:id', auth, async (req, res) => {
 		console.log(err);
 	}
 });
+/**
+ * @swagger
+ * /messages/{id}:
+ *  delete:
+ *    description: Deletes the message with the id specified
+ *    parameters:
+ *      - in: header
+ *        name: x-access-token
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: success response
+ *      400:
+ *        description: bad data request
+*/
+app.delete('/messages/:id', auth, async (req, res) => {
+	try {
+		const message = await Messages.findById(req.params.id);
+		if (message) {
+			const chanel = await Chanels.findById(message.id_chanel);
+			if (message.id_user === req.user.id || chanel.id_user === req.user.id) {
+				const deletedMessage = await Messages.findByIdAndDelete(req.params.id);
+				res.send('Message deleted');
+			} else {
+				res.status(400).send('You dont have permissions to delete this message');
+			}
+		} else {
+			res.status(400).send("This message dont exist");
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
