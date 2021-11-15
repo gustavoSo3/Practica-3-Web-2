@@ -7,6 +7,7 @@ const swaggerUI = require('swagger-ui-express');
 const mongoose = require('mongoose');
 const Users = require('./src/models/Users');
 const Sessions = require('./src/models/Sessions');
+const Chanels = require('./src/models/Chanels');
 
 require('dotenv').config();
 const port = process.env.PORT || 1607;
