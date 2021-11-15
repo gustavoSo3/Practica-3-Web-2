@@ -5,6 +5,9 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 
 const mongoose = require('mongoose');
+
+require('dotenv').config();
+const port = process.env.PORT || 1607;
 //Swagger
 const swaggerOptions = {
 	swaggerDefinition: {
@@ -25,3 +28,16 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const db_url = "mongodb+srv://" + process.env.DB_USER + ":" + process.env.DB_PASSWORD + "@" + process.env.DB_CLUSTER + ".9t5g5.mongodb.net/" + process.env.DB_COLLECTION + "?retryWrites=true&w=majority"
+mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
+	.then((result) => {
+		console.log('Conected to database');
+		app.listen(port, () => {
+			console.log('App iniciada en http://localhost:' + port);
+			console.log('Swagger docs en http://localhost:' + port + "/swagger-ui");
+		});
+	}).catch((err) => console.log(err, 'Error al conectarse a la base de datos'));
