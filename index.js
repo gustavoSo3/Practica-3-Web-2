@@ -194,3 +194,38 @@ app.post('/chanels', auth, async (req, res) => {
 		console.log(err);
 	}
 });
+/**
+ * @swagger
+ * /chanels/{id}/invite:
+ *  get:
+ *    description: Gets chanel invite link
+ *    parameters:
+ *      - in: header
+ *        name: x-access-token
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: success response
+ *      400:
+ *        description: bad data request
+*/
+app.get('/chanels/:id/invite', auth, async (req, res) => {
+	try {
+		const chanel = await Chanels.findById(req.params.id);
+		if (chanel && (chanel.id_user === req.user.id)) {
+			const invite_link = req.protocol + "://" + req.get('host') + "/chanel/" + chanel._id + "/register";
+			res.json({
+				invite_link
+			});
+		} else {
+			res.status(400).send('You cant do this');
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
