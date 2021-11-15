@@ -347,7 +347,7 @@ app.post('/chanels/:id', auth, async (req, res) => {
 				const partOfChanel = await ChanelUser.findOne({ id_chanel: req.params.id, id_user: req.user.id });
 				if (partOfChanel) {
 					const newMessage = await Messages.create({
-						id_group: req.params.id,
+						id_chanel: req.params.id,
 						id_user: req.user.id,
 						message
 					});
