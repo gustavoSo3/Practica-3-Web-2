@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const channel_user_schema = new mongoose.Schema({
-	id_channel: {
+	id_chanel: {
 		type: String,
 		require: true
 	},
