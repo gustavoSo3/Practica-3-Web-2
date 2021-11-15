@@ -311,3 +311,57 @@ app.post('/chanels/:id/register', auth, async (req, res) => {
 		console.log(err);
 	}
 });
+/**
+ * @swagger
+ * /chanels/{id}:
+ *  post:
+ *    description: Creates a new message on the current chanel
+ *    parameters:
+ *      - in: header
+ *        name: x-access-token
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *      - in: body
+ *        name: body contents
+ *        description: Message conten
+ *        type: object
+ *        properties:
+ *          message:
+ *            type: string
+ *    responses:
+ *      200:
+ *        description: success response
+ *      400:
+ *        description: bad data request
+*/
+app.post('/chanels/:id', auth, async (req, res) => {
+	try {
+		const { message } = req.body;
+		if (message && (message !== "")) {
+			const chanel = await Chanels.findById(req.params.id);
+			if (chanel) {
+				const partOfChanel = await ChanelUser.findOne({ id_chanel: req.params.id, id_user: req.user.id });
+				if (partOfChanel) {
+					const newMessage = await Messages.create({
+						id_group: req.params.id,
+						id_user: req.user.id,
+						message
+					});
+					res.json(newMessage);
+				} else {
+					res.status(400).send("You can't do that");
+				}
+			} else {
+				res.status(400).send('Wrong chanel id');
+			}
+		} else {
+			res.status(400).send("You need to sen a message");
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
