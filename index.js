@@ -3,6 +3,10 @@ const app = express();
 const path = require('path');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const auth = require('./src/middlewares/auth');
 
 const mongoose = require('mongoose');
 const Users = require('./src/models/Users');
