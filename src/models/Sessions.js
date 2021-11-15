@@ -10,4 +10,4 @@ const sessions_schema = new mongoose.Schema({
 		require: true
 	}
 }, { timestamps: true });
-module.exports = mongoose.model('users', sessions_schema);
+module.exports = mongoose.model('sessions', sessions_schema);
