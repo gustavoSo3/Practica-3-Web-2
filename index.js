@@ -52,3 +52,58 @@ mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
 		console.log(err, 'Error al conectarse a la base de datos');
 		process.exit(1);
 	});
+
+
+/**
+ * @swagger
+ * /register:
+ *  post:
+ *    description: Create a new user
+ *    parameters:
+ *      - in: body
+ *        name: body contents
+ *        description: User email, name and password
+ *        type: object
+ *        properties:
+ *          name:
+ *            type: string
+ *          email:
+ *            type: string
+ *          password:
+ *            type: string
+ *    responses:
+ *      200:
+ *        description: Created and logged in
+ *      409:
+ *        description: Email on use
+ *      400:
+ *        description: Body parameters missing
+*/
+app.post('/register', async (req, res) => {
+	try {
+		const { name, email, password } = req.body;
+		if (!(name && email && password)) {
+			res.status(400).send("Body parameters missing");
+		}
+		const userExist = await Users.findOne({ email });
+		if (userExist) {
+			res.status(409).send("Email on use");
+		} else {
+
+			const encryptedPassword = await bcrypt.hash(password, 10);
+			const newUser = await Users.create({
+				name,
+				email: email.toLowerCase(),
+				password: encryptedPassword
+			});
+
+			const token = await jwt.sign({
+				id: newUser._id, email
+			}, process.env.TOKEN_KEY);
+			newUser.token = token;
+			res.status(201).json(newUser);
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
