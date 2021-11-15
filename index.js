@@ -6,7 +6,6 @@ const swaggerUI = require('swagger-ui-express');
 
 const mongoose = require('mongoose');
 const Users = require('./src/models/Users');
-const Sessions = require('./src/models/Sessions');
 const Chanels = require('./src/models/Chanels');
 const ChanelUser = require('./src/models/ChanelUser');
 const Messages = require('./src/models/Messages');
