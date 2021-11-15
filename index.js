@@ -64,7 +64,6 @@ mongoose.connect(db_url, { useNewUrlParser: true, useUnifiedTopology: true })
 		process.exit(1);
 	});
 
-
 /**
  * @swagger
  * /register:
