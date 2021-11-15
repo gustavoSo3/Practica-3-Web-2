@@ -229,3 +229,36 @@ app.get('/chanels/:id/invite', auth, async (req, res) => {
 		console.log(err);
 	}
 });
+/**
+ * @swagger
+ * /chanels/{id}/messages:
+ *  get:
+ *    description: Gets chanel messages
+ *    parameters:
+ *      - in: header
+ *        name: x-access-token
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: success response
+ *      400:
+ *        description: bad data request
+*/
+app.get('/chanels/:id/messages', auth, async (req, res) => {
+	try {
+		const partOfChanel = await ChanelUser.findOne({ id_chanel: req.params.id, id_user: req.user.id });
+		if (partOfChanel) {
+			const messages = await Messages.find({ id_chanel: req.params.id });
+			res.json(messages);
+		} else {
+			res.status(400).send("You cant see this chanel");
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
