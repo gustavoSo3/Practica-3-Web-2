@@ -12,6 +12,9 @@ const users_schema = new mongoose.Schema({
 	password: {
 		type: String,
 		require: true
+	},
+	token: {
+		type: String
 	}
 }, { timestamps: true });
 module.exports = mongoose.model('users', users_schema);
