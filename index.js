@@ -262,3 +262,42 @@ app.get('/chanels/:id/messages', auth, async (req, res) => {
 		console.log(err);
 	}
 });
+/**
+ * @swagger
+ * /chanels/{id}/register:
+ *  post:
+ *    description: Register the logged user to the chanel
+ *    parameters:
+ *      - in: header
+ *        name: x-access-token
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: success response
+ *      400:
+ *        description: bad data request
+*/
+app.post('/chanels/:id/register', auth, async (req, res) => {
+	try {
+		const chanel = await Chanels.findById(req.params.id);
+		if (chanel) {
+			const partOfChanel = await ChanelUser.findOne({ id_chanel: req.params.id, id_user: req.user.id });
+			if (!partOfChanel) {
+				await ChanelUser.create({
+					id_chanel: req.params.id,
+					id_user: req.user.id
+				});
+			}
+			res.send('done');
+		} else {
+			res.status(400).send('Wrong chanel id');
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
