@@ -29,7 +29,18 @@ const swaggerOptions = {
 				name: "GSO3",
 				correo: "gustavonline.games@gmail.com"
 			}
-		}
+		},
+		securityDefinitions: {
+			jwt: {
+				type: 'apiKey',
+				name: 'x-access-token',
+				scheme: 'bearer',
+				in: 'header',
+			},
+		},
+		security: [{
+			jwt: []
+		}]
 	},
 	apis: ['index.js']
 }
