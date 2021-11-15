@@ -149,3 +149,48 @@ app.post('/login', async (req, res) => {
 		console.log(err);
 	}
 });
+/**
+ * @swagger
+ * /chanels:
+ *  post:
+ *    description: Create a new Chanel
+ *    parameters:
+ *      - in: header
+ *        name: x-access-token
+ *        schema:
+ *          type: string
+ *      - in: body
+ *        name: body contents
+ *        description: Chanel name
+ *        type: object
+ *        properties:
+ *          name:
+ *            type: string
+ *    responses:
+ *      200:
+ *        description: success response
+ *      400:
+ *        description: Missing body parameters
+*/
+app.post('/chanels', auth, async (req, res) => {
+	try {
+		const { name } = req.body;
+		if (name) {
+			const newChanel = await Chanels.create({
+				id_user: req.user.id,
+				name
+			});
+			const invite_link = req.protocol + "://" + req.get('host') + "/chanel/" + newChanel._id + "/register";
+			newChanel.invite_link = invite_link;
+			await ChanelUser.create({
+				id_chanel: newChanel._id,
+				id_user: req.user.id
+			});
+			res.status(200).json(newChanel);
+		} else {
+			res.status(400).send('The chanel name is required');
+		}
+	} catch (err) {
+		console.log(err);
+	}
+});
