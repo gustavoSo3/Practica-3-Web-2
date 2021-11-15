@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const Users = require('./src/models/Users');
 const Sessions = require('./src/models/Sessions');
 const Chanels = require('./src/models/Chanels');
+const ChanelUser = require('./src/models/ChanelUser');
 
 require('dotenv').config();
 const port = process.env.PORT || 1607;
