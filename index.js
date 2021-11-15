@@ -9,6 +9,7 @@ const Users = require('./src/models/Users');
 const Sessions = require('./src/models/Sessions');
 const Chanels = require('./src/models/Chanels');
 const ChanelUser = require('./src/models/ChanelUser');
+const Messages = require('./src/models/Messages');
 
 require('dotenv').config();
 const port = process.env.PORT || 1607;
